@@ -24,3 +24,44 @@ function toggleFont() {
 
     isDefaultFont = !isDefaultFont;
 }
+let isSorted = localStorage.getItem("isSorted") === "true";
+let originalOrder = [];
+
+document.addEventListener("DOMContentLoaded", function() {
+    const doctorContainer = document.querySelector(".doctor-list");
+    originalOrder = Array.from(doctorContainer.querySelectorAll(".doctor-card"));
+
+    if (isSorted) {
+        sortDoctorsByExperience();
+    }
+});
+
+function toggleSort() {
+    if (isSorted) {
+        revertToOriginalOrder();
+        localStorage.setItem("isSorted", "false");
+    } else {
+        sortDoctorsByExperience();
+        localStorage.setItem("isSorted", "true");
+    }
+
+    isSorted = !isSorted;
+}
+
+function sortDoctorsByExperience() {
+    const doctorContainer = document.querySelector(".doctor-list");
+    const doctorCards = Array.from(doctorContainer.querySelectorAll(".doctor-card"));
+
+    doctorCards.sort((a, b) => {
+        const experienceA = parseInt(a.querySelector("p:nth-of-type(2)").textContent.match(/\d+/)[0]);
+        const experienceB = parseInt(b.querySelector("p:nth-of-type(2)").textContent.match(/\d+/)[0]);
+        return experienceA - experienceB;
+    });
+
+    doctorCards.forEach(card => doctorContainer.appendChild(card));
+}
+
+function revertToOriginalOrder() {
+    const doctorContainer = document.querySelector(".doctor-list");
+    originalOrder.forEach(card => doctorContainer.appendChild(card));
+}
