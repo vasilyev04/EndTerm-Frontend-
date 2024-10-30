@@ -1,12 +1,28 @@
-const button = document.getElementById('changeColorButton');
-const body = document.body;
+document.getElementById('themeToggle').addEventListener('change', function () {
+    const body = document.body;
+    const container = document.querySelector('.container');
+    const footer = document.querySelector('footer');
 
+    if (this.checked) {
+        body.classList.add('night-mode');
+        container.classList.add('night-mode');
+        footer.classList.add('night-mode');
+        localStorage.setItem('theme', 'night');
+    } else {
+        body.classList.remove('night-mode');
+        container.classList.remove('night-mode');
+        footer.classList.remove('night-mode');
+        localStorage.setItem('theme', 'day'); 
+    }
+});
+
+
+const button = document.getElementById('changeColorButton');
 const colors = ['#FF5733', '#33FFBD', '#FF33A6', '#338AFF', '#FFD433', '#75FF33'];
 
 function changeBackgroundColor() {
     const randomColor = colors[Math.floor(Math.random() * colors.length)];
-    
-    body.style.backgroundColor = randomColor;
+    document.body.style.backgroundColor = randomColor;
 }
 
 button.addEventListener('click', changeBackgroundColor);
@@ -31,10 +47,40 @@ function updateDateTime() {
     dateTimeElement.textContent = getCurrentDateTime();
 }
 
-
 setInterval(updateDateTime, 1000);
 
-window.onload = updateDateTime;
+window.onload = function() {
+    updateDateTime();
+
+  
+    const theme = localStorage.getItem('theme');
+    const body = document.body;
+    const container = document.querySelector('.container');
+    const footer = document.querySelector('footer');
+    const themeToggle = document.getElementById('themeToggle');
+
+    if (theme === 'night') {
+        body.classList.add('night-mode');
+        container.classList.add('night-mode');
+        footer.classList.add('night-mode');
+        themeToggle.checked = true; 
+    } else {
+        
+        body.classList.remove('night-mode');
+        container.classList.remove('night-mode');
+        footer.classList.remove('night-mode');
+        themeToggle.checked = false; 
+    }
+}
+
+function showConfetti() {
+    confetti(
+        {
+            particleCount: 200,
+            spread: 200
+        }
+    );
+}
 
 
 var modal = document.getElementById("contactModal");
@@ -59,28 +105,3 @@ window.onclick = function(event) {
     }
 };
 
-
-function showConfetti() {
-    confetti(
-        {
-            particleCount: 200,
-            spread: 200
-        }
-    );
-}
-
-document.getElementById('themeToggle').addEventListener('change', function () {
-    const body = document.body;
-    const formContainer = document.querySelector('.container');
-    const labels = document.querySelectorAll('label');
-
-    if (this.checked) {
-        body.classList.add('night-mode');
-        formContainer.classList.add('night-mode');
-        labels.forEach(label => label.classList.add('night-mode'));
-    } else {
-        body.classList.remove('night-mode');
-        formContainer.classList.remove('night-mode');
-        labels.forEach(label => label.classList.remove('night-mode'));
-    }
-});
